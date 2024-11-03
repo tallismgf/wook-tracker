@@ -1,11 +1,11 @@
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import dayjs from 'dayjs';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Input } from '../../components/input';
 import { PickerDate } from '../../components/pickerDate';
 import { useCallback, useState } from 'react';
 import { Button } from '../../components/button';
-import { CreateDemand } from '../../entities/demand';
+import { CreateDemand, Demand } from '../../entities/demand';
 import { useDemands } from '../../hooks/useDemands';
 import {
   ButtonPriority,
@@ -19,12 +19,22 @@ import {
 } from './styles';
 
 export function CreateTask() {
+  const { params } = useRoute();
+  // @ts-ignore
+  const demandParam: Demand = params?.demand;
+  const deadlineParam = demandParam
+    ? dayjs(demandParam.deadline, 'DD/MM/YYYY').toDate()
+    : undefined;
   const { goBack } = useNavigation();
-  const { createDemand } = useDemands();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [deadline, setDeadline] = useState<Date | undefined>();
-  const [highPriority, setHighPriority] = useState(false);
+  const { createDemand, editDemand } = useDemands();
+  const [title, setTitle] = useState(demandParam?.title || '');
+  const [description, setDescription] = useState(
+    demandParam?.description || '',
+  );
+  const [deadline, setDeadline] = useState<Date | undefined>(deadlineParam);
+  const [highPriority, setHighPriority] = useState(
+    demandParam?.priority === 'high' || false,
+  );
 
   const disabledKeyboard = () => {
     Keyboard.dismiss();
@@ -41,6 +51,27 @@ export function CreateTask() {
     createDemand(demand);
     goBack();
   }, [deadline, description, highPriority, title, createDemand, goBack]);
+
+  const onEditDemand = useCallback(() => {
+    const formattedDate = dayjs(deadline).format('DD/MM/YYYY');
+    const demandEdited: Demand = {
+      id: demandParam.id,
+      title,
+      description,
+      deadline: formattedDate,
+      priority: highPriority ? 'high' : 'normal',
+    };
+    editDemand(demandEdited);
+    goBack();
+  }, [
+    deadline,
+    demandParam.id,
+    title,
+    description,
+    highPriority,
+    editDemand,
+    goBack,
+  ]);
 
   return (
     // <KeyboardAvoidingView
@@ -63,7 +94,10 @@ export function CreateTask() {
 
         <RowDate>
           <RowDateLabel>Prazo final:</RowDateLabel>
-          <PickerDate onSelectDate={date => setDeadline(date)} />
+          <PickerDate
+            dateSelected={deadline}
+            onSelectDate={date => setDeadline(date)}
+          />
         </RowDate>
 
         <RowPriority>
@@ -78,7 +112,11 @@ export function CreateTask() {
           </ButtonPriority>
         </RowPriority>
 
-        <Button label="Adicionar" onPress={onPressAdd} />
+        {demandParam ? (
+          <Button label="Editar" onPress={onEditDemand} />
+        ) : (
+          <Button label="Adicionar" onPress={onPressAdd} />
+        )}
       </Container>
     </TouchableWithoutFeedback>
     // </KeyboardAvoidingView>

@@ -4,11 +4,12 @@ import { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 
 type PickerDateProps = {
+  dateSelected?: Date;
   onSelectDate: (date: Date) => void;
 };
 
-export function PickerDate({ onSelectDate }: PickerDateProps) {
-  const [deliverDate, setDeliverDate] = useState(new Date());
+export function PickerDate({ dateSelected, onSelectDate }: PickerDateProps) {
+  const [deliverDate, setDeliverDate] = useState(dateSelected || new Date());
   const [showModalDate, setShowModalDate] = useState(false);
 
   const DeliverDateText = useMemo(() => {

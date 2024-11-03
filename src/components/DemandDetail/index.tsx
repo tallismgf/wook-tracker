@@ -14,6 +14,7 @@ import {
 } from './styles';
 import { useDemands } from '../../hooks/useDemands';
 import { useCallback } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 type DemandDetailProps = {
   visible: boolean;
@@ -26,23 +27,23 @@ export function DemandDetail({
   demand,
   onChangeVisible,
 }: DemandDetailProps) {
+  const { navigate } = useNavigation();
   const { deleteDemand, finishDemand } = useDemands();
 
-  const onDeleteDemand = useCallback(
-    (id: string) => {
-      deleteDemand(id);
-      onChangeVisible();
-    },
-    [deleteDemand, onChangeVisible],
-  );
+  const onDeleteDemand = useCallback(() => {
+    deleteDemand(demand!.id);
+    onChangeVisible();
+  }, [deleteDemand, demand, onChangeVisible]);
 
-  const onFinishDemand = useCallback(
-    (id: string) => {
-      finishDemand(id);
-      onChangeVisible();
-    },
-    [finishDemand, onChangeVisible],
-  );
+  const onFinishDemand = useCallback(() => {
+    finishDemand(demand!.id);
+    onChangeVisible();
+  }, [demand, finishDemand, onChangeVisible]);
+
+  const onEditDemand = useCallback(() => {
+    // @ts-ignore
+    navigate('Create', { demand });
+  }, [demand, navigate]);
 
   if (!demand) {
     return <></>;
@@ -74,16 +75,20 @@ export function DemandDetail({
                 </Priority>
               </Item>
             </Row>
-            <Button
-              label="Finalizar"
-              style={{ backgroundColor: '#4CAF50' }}
-              onPress={() => onFinishDemand(demand.id)}
-            />
-            <Button label="Editar" />
+            {!demand.finished && (
+              <Button
+                label="Finalizar"
+                style={{ backgroundColor: '#4CAF50' }}
+                onPress={onFinishDemand}
+              />
+            )}
+            {!demand.finished && (
+              <Button label="Editar" onPress={onEditDemand} />
+            )}
             <Button
               label="Excluir"
               style={{ backgroundColor: '#F44336' }}
-              onPress={() => onDeleteDemand(demand.id)}
+              onPress={onDeleteDemand}
             />
           </Card>
         </Container>

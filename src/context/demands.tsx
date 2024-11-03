@@ -15,6 +15,7 @@ type DemandsContextProps = {
   createDemand: (demand: CreateDemand) => void;
   deleteDemand: (id: string) => void;
   finishDemand: (id: string) => void;
+  editDemand: (demand: Demand) => void;
 };
 
 export const DemandsContext = createContext<DemandsContextProps>(
@@ -67,14 +68,25 @@ const DemandsProvider: React.FC<DemandsProviderProps> = ({ children }) => {
     [demands, setDemands],
   );
 
+  const editDemand = useCallback(
+    (demand: Demand) => {
+      const indexDemand = demands.findIndex(item => item.id === demand.id);
+      const editDemands = [...demands];
+      editDemands.splice(indexDemand, 1, demand);
+      setDemands(editDemands);
+    },
+    [demands],
+  );
+
   const values = useMemo(
     () => ({
       demands,
       createDemand,
       deleteDemand,
       finishDemand,
+      editDemand,
     }),
-    [demands, createDemand, deleteDemand, finishDemand],
+    [demands, createDemand, deleteDemand, finishDemand, editDemand],
   );
 
   return (
