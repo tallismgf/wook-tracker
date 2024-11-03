@@ -6,5 +6,6 @@ declare module 'styled-components/native' {
     background: string;
     lightBackground: string;
     text: string;
+    highPriority: string;
   }
 }

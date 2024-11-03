@@ -4,4 +4,6 @@ export const theme = {
   // lightBackground: '#161616',
   lightBackground: '#323232',
   text: '#fcfcfc',
+
+  highPriority: '#FF4C4C',
 };

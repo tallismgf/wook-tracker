@@ -7,7 +7,10 @@ const Stack = createNativeStackNavigator();
 
 export function AppRoutes() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="Start"
+    >
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Create" component={CreateTask} />

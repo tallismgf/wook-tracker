@@ -1,3 +1,4 @@
+import { StackActions, useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import {
   CircleButton,
@@ -7,14 +8,21 @@ import {
   SubTitle,
   Title,
 } from './styles';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useCallback, useEffect } from 'react';
 
 export function Start() {
   const { dispatch } = useNavigation();
 
-  function onPressButton() {
+  const onPressButton = useCallback(() => {
     dispatch(StackActions.replace('Home'));
-  }
+  }, [dispatch]);
+
+  useEffect(() => {
+    const id = setTimeout(onPressButton, 5000);
+    return () => {
+      clearTimeout(id);
+    };
+  }, [onPressButton]);
 
   return (
     <Container>
