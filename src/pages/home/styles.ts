@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { BaseContainer } from '../../common/styles/components';
+import { BaseContainer, BaseText } from '../../common/styles/components';
 
 export const Container = styled(BaseContainer)`
   padding: 24px;
@@ -17,3 +17,21 @@ export const AddButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 `;
+
+export const RowFilters = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const ButtonFilter = styled.TouchableOpacity<{ active?: boolean }>`
+  width: 30%;
+  border-radius: 12px;
+  border: 1px solid ${({ active }) => (active ? '#1565c0' : '#fff')};
+  background-color: ${({ active, theme }) =>
+    active ? '#1565c0' : theme.background};
+  padding: 2px 6px;
+  align-items: center;
+`;
+
+export const LabelFilter = styled(BaseText)``;
