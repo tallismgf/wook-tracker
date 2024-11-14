@@ -28,7 +28,7 @@ enum FilterKey {
 
 const FilterItems = [
   {
-    label: 'Em progresso',
+    label: 'Progresso',
     key: FilterKey.inProgress,
   },
   {
@@ -66,9 +66,23 @@ export function Home() {
   );
 
   const demandsFormatted = useMemo(() => {
-    const demandsFiltered = demands.filter(demand =>
-      demand.title.includes(textSearch),
-    );
+    const demandsFiltered = demands
+      .filter(demand => demand.title.includes(textSearch))
+      .filter(demand => {
+        if (activeFilter === FilterKey.all) {
+          return true;
+        }
+
+        if (activeFilter === FilterKey.finished && demand.finished) {
+          return true;
+        }
+
+        if (activeFilter === FilterKey.inProgress && !demand.finished) {
+          return true;
+        }
+
+        return false;
+      });
 
     const demandsCustom = demandsFiltered.map(({ id, deadline, title }) => ({
       id,
@@ -81,7 +95,7 @@ export function Home() {
       return dateA.isBefore(dateB) ? -1 : 1;
     });
     return sortedDemands;
-  }, [demands, textSearch]);
+  }, [demands, textSearch, activeFilter]);
 
   return (
     <>

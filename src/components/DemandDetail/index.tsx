@@ -63,11 +63,11 @@ export function DemandDetail({
             <Description>{demand.description}</Description>
             <Row>
               <Item>
-                <Label>Prazo final: </Label>
+                <Label style={{ fontWeight: 'bold' }}>Prazo final: </Label>
                 <Label>{demand.deadline}</Label>
               </Item>
               <Item>
-                <Label>Prioridade: </Label>
+                <Label style={{ fontWeight: 'bold' }}>Prioridade: </Label>
                 <Priority highPriority={demand.priority === 'high'}>
                   <Label>
                     {demand.priority === 'high' ? 'Alta' : 'Normal'}

@@ -17,6 +17,7 @@ export const Card = styled.View`
 
 export const Title = styled(BaseText)`
   font-size: 24px;
+  font-weight: 500;
 `;
 
 export const Description = styled(BaseText)``;
@@ -25,7 +26,7 @@ export const Row = styled.View`
   width: 100%;
   padding-left: 12px;
   padding-right: 12px;
-  flex-direction: row;
+  /* flex-direction: row; */
   justify-content: space-between;
 `;
 

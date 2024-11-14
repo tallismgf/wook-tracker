@@ -22,6 +22,7 @@ export function CreateTask() {
   const { params } = useRoute();
   // @ts-ignore
   const demandParam: Demand = params?.demand;
+  console.log(demandParam);
   const deadlineParam = demandParam
     ? dayjs(demandParam.deadline, 'DD/MM/YYYY').toDate()
     : undefined;
@@ -65,7 +66,7 @@ export function CreateTask() {
     goBack();
   }, [
     deadline,
-    demandParam.id,
+    demandParam,
     title,
     description,
     highPriority,

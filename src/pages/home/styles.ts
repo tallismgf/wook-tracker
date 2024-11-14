@@ -26,6 +26,7 @@ export const RowFilters = styled.View`
 
 export const ButtonFilter = styled.TouchableOpacity<{ active?: boolean }>`
   width: 30%;
+  min-height: 28px;
   border-radius: 12px;
   border: 1px solid ${({ active }) => (active ? '#1565c0' : '#fff')};
   background-color: ${({ active, theme }) =>
